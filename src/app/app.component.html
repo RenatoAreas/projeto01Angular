@@ -1,0 +1,450 @@
+<!-- CONTEUDO EXIBIDO PARA O USUARIO AUTENTICADO -->
+<div *ngIf="isLoggedIn">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+        <div class="sidebar-brand-icon">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Agenda de Tarefas</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Painel principal</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Controle de tarefas
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+          aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Minhas tarefas</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Selecione a ação:</h6>
+            <a class="collapse-item" routerLink="cadastro-tarefas">Cadastrar tarefas</a>
+            <a class="collapse-item" routerLink="consulta-tarefas">Consultar tarefas</a>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <div class="topbar-divider d-none d-sm-block"></div>
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                  <strong><i class="fa fa-user-circle"></i>&nbsp;{{usuario_nome}}</strong>
+                  <br/>
+                  <small>({{usuario_email}})</small>
+                </span>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" routerLink="dados-do-usuario">
+                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Minha Conta
+                </a>
+                <a class="dropdown-item" routerLink="alterar-senha">
+                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Alterar Senha
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Sair do Sistema
+                </a>
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- local para renderizar os componentes -->
+          <router-outlet></router-outlet>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; COTI Informática 2021</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Deseja sair do sistema?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Confirme para encerrar sua sessão na agenda.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <button class="btn btn-primary" (click)="logout()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONTEUDO EXIBIDO PARA O USUARIO NAO AUTENTICADO -->
+<div *ngIf="!isLoggedIn">
+
+  <div class="row justify-content-center">
+
+    <div class="col-xl-4 col-lg-4 col-md-4">
+
+      <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="p-5">
+                <div class="text-center">
+                  <h1><i class="fa fa-user-circle"></i></h1>
+                  <h1 class="h4 text-gray-900 mb-4">Acesso ao Sistema</h1>
+                </div>
+
+                <form class="user" [formGroup]="formLogin" (ngSubmit)="onLoginSubmit()" autocomplete="off">
+
+                  <div class="form-group">
+                    <input type="email" class="form-control form-control-user" formControlName="email" />
+
+                    <div class="text-danger" *ngIf="loginForm.email.touched && loginForm.email.invalid">
+
+                      <span *ngIf="loginForm.email.errors.required">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Por favor, informe o email de acesso.
+                      </span>
+
+                      <span *ngIf="loginForm.email.errors.email">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Por favor, informe um email válido.
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                  <div class="form-group">
+                    <input type="password" class="form-control form-control-user" formControlName="senha" />
+
+                    <div class="text-danger" *ngIf="loginForm.senha.touched && loginForm.senha.invalid">
+
+                      <span *ngIf="loginForm.senha.errors.required">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Por favor, informe a senha de acesso.
+                      </span>
+
+                      <span *ngIf="loginForm.senha.errors.minlength">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Por favor, informe no mínimo 8 caracteres.
+                      </span>
+
+                      <span *ngIf="loginForm.senha.errors.maxlength">
+                        <i class="fa fa-exclamation-circle"></i>
+                        Por favor, informe no máximo 25 caracteres.
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                  <button type="submit" [disabled]="!formLogin.valid" class="btn btn-primary btn-user btn-block">
+                    Acessar Conta
+                  </button>
+
+                </form>
+
+                <div *ngIf="mensagemAcessoNegado" class="text-danger text-center mt-3 mb-3">
+                  <i class="fa fa-exclamation-circle"></i> <strong>{{mensagemAcessoNegado}}</strong>
+                </div>
+
+                <hr>
+                <div class="text-center">
+                  <a class="small" href="#" data-target="#modal_recuperarsenha" data-toggle="modal">
+                    Esqueci minha senha?
+                  </a>
+                </div>
+                <div class="text-center">
+                  <a class="small" href="#" data-target="#modal_criarconta" data-toggle="modal">
+                    Criar conta de Acesso!
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- JANELA MODAL PARA CRIAÇÃO DE CONTA DE USUARIO -->
+<div id="modal_criarconta" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fa fa-user-plus"></i> Criar conta de usuário</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div *ngIf="mensagemSucessoCadastro" class="alert alert-success">
+          <strong>{{mensagemSucessoCadastro}}</strong>
+          <button type="button" class="close" (click)="limparMensagensCadastro()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div *ngIf="mensagemErroCadastro" class="alert alert-danger">
+          <strong>{{mensagemErroCadastro}}</strong>
+          <button type="button" class="close" (click)="limparMensagensCadastro()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <form [formGroup]="formRegister" (ngSubmit)="onRegisterSubmit()" autocomplete="off">
+
+          <div class="row">
+            <div class="col-md-6">
+              <label>Nome do usuário:</label>
+              <input type="text" formControlName="nome" class="form-control" />
+
+              <div class="text-danger" *ngIf="registerForm.nome.touched && registerForm.nome.invalid">
+
+                <span *ngIf="registerForm.nome.errors.required">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe o nome do usuário.
+                </span>
+
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <label>Email do usuário:</label>
+              <input type="text" formControlName="email" class="form-control" />
+
+              <div class="text-danger" *ngIf="registerForm.email.touched && registerForm.email.invalid">
+
+                <span *ngIf="registerForm.email.errors.required">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe o email do usuário.
+                </span>
+
+                <span *ngIf="registerForm.email.errors.email">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe um email inválido.
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+          <br />
+
+          <div class="row">
+            <div class="col-md-6">
+              <label>Senha de acesso:</label>
+              <input type="password" formControlName="senha" class="form-control" />
+
+              <div class="text-danger" *ngIf="registerForm.senha.touched && registerForm.senha.invalid">
+
+                <span *ngIf="registerForm.senha.errors.required">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe a senha do usuário.
+                </span>
+
+                <span *ngIf="registerForm.senha.errors.minlength">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe no mínimo 8 caracteres.
+                </span>
+
+                <span *ngIf="registerForm.senha.errors.maxlength">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe no máximo 25 caracteres.
+                </span>
+
+              </div>
+
+            </div>
+            <div class="col-md-6">
+              <label>Confirme sua senha:</label>
+              <input type="password" formControlName="senhaConfirmacao" class="form-control" />
+
+              <div class="text-danger"
+                *ngIf="registerForm.senhaConfirmacao.touched && registerForm.senhaConfirmacao.invalid">
+
+                <span *ngIf="registerForm.senhaConfirmacao.errors.required">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, confirme a senha do usuário.
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+          <br />
+
+          <button class="btn btn-success" [disabled]="!formRegister.valid" type="submit">
+            <i class="fa fa-check-circle"></i> Criar Conta de Acesso
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-light" (click)="onRegisterReset()">
+            Cancelar
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JANELA MODAL PARA RECUPERAÇÃO DE SENHA DO USUARIO -->
+<div id="modal_recuperarsenha" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="fa fa-key"></i> Recuperar senha</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <p>
+          Informe seu email e estaremos enviando uma senha provisória para
+          você acessar o sistema. Atraves desta senha provisória você poderá
+          atualizar e gerar uma senha nova.
+        </p>
+
+        <hr />
+
+        <div *ngIf="mensagemSucessoRecuperarSenha" class="alert alert-success">
+          <strong>{{mensagemSucessoRecuperarSenha}}</strong>
+          <button type="button" class="close" (click)="limparMensagensRecuperarSenha()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div *ngIf="mensagemErroRecuperarSenha" class="alert alert-danger">
+          <strong>{{mensagemErroRecuperarSenha}}</strong>
+          <button type="button" class="close" (click)="limparMensagensRecuperarSenha()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <form [formGroup]="formPasswordRecover" (ngSubmit)="onPasswordRecoverSubmit()" autocomplete="off">
+
+          <div class="row">
+            <div class="col-md-12">
+              <label>Email do usuário:</label>
+              <input type="text" class="form-control" formControlName="email" />
+
+              <div class="text-danger" *ngIf="passwordRecoverForm.email.touched && passwordRecoverForm.email.invalid">
+
+                <span *ngIf="passwordRecoverForm.email.errors.required">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe o email do usuário.
+                </span>
+
+                <span *ngIf="passwordRecoverForm.email.errors.email">
+                  <i class="fa fa-exclamation-circle"></i>
+                  Por favor, informe um email inválido.
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+          <br />
+
+          <button class="btn btn-success" type="submit" [disabled]="!formPasswordRecover.valid">
+            <i class="fa fa-check-circle"></i> Confirmar
+          </button>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>

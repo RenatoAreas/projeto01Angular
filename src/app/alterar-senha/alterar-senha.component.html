@@ -1,0 +1,50 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Alterar Senha</h6>
+    </div>
+    <div class="card-body">
+
+        <div *ngIf="mensagem" class="alert alert-secondary">
+            <strong>{{mensagem}}</strong>
+        </div>
+
+        <form [formGroup]="formPasswordRecover" (ngSubmit)="onSubmit()">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Senha atual:</label>
+                    <input type="password" class="form-control" formControlName="senha" />
+                    <div class="text-danger" *ngIf="form.senha.touched && form.senha.invalid">
+                        <span *ngIf="form.senha.errors.required">
+                            <i class="fa fa-exclamation-circle"></i> Por favor, informe sua senha atual.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Nova senha:</label>
+                    <input type="password" class="form-control" formControlName="senhaNova" />
+                    <div class="text-danger" *ngIf="form.senhaNova.touched && form.senhaNova.invalid">
+                        <span *ngIf="form.senhaNova.errors.required">
+                            <i class="fa fa-exclamation-circle"></i> Por favor, informe sua nova senha.
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>Confirme a nova senha:</label>
+                    <input type="password" class="form-control" formControlName="senhaConfirmacao" />
+                    <div class="text-danger" *ngIf="form.senhaConfirmacao.touched && form.senhaConfirmacao.invalid">
+                        <span *ngIf="form.senhaConfirmacao.errors.required">
+                            <i class="fa fa-exclamation-circle"></i> Por favor, confirme a sua nova senha.
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <input type="submit" class="btn btn-success" value="Salvar Alterações"
+                [disabled]="!formPasswordRecover.valid" />
+
+        </form>
+
+    </div>
+</div>

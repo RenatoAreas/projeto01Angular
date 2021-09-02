@@ -1,0 +1,27 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Minha Conta</h6>
+    </div>
+    <div class="card-body">
+
+        <table class="table table-bordered">
+            <tr>
+                <td width="200">ID do Usuário:</td>
+                <td><strong>{{usuario.idUsuario}}</strong></td>
+            </tr>
+            <tr>
+                <td width="200">Nome do Usuário:</td>
+                <td><strong>{{usuario.nome}}</strong></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><strong>{{usuario.email}}</strong></td>
+            </tr>
+            <tr>
+                <td>Data de Cadastro:</td>
+                <td><strong>{{usuario.dataCadastro | date : 'dd/MM/yyyy HH:mm'}}</strong></td>
+            </tr>
+        </table>
+
+    </div>
+</div>

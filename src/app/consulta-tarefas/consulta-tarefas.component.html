@@ -1,0 +1,262 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Consulta de Tarefas</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Filtrar tarefas" [(ngModel)]="filtro" />
+            </div>
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome da tarefa</th>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Descrição</th>
+                        <th>Prioridade</th>
+                        <th>Operações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        *ngFor="let tarefa of dados | filter : filtro | paginate : { itemsPerPage: 3, currentPage: page }">
+                        <td>{{tarefa.nome | uppercase}}</td>
+                        <td>{{tarefa.data | date : 'dd/MM/yyyy'}}</td>
+                        <td>{{tarefa.hora}}h</td>
+                        <td>{{tarefa.descricao}}</td>
+                        <td>
+                            <span *ngIf="tarefa.prioridade == '3'" class="badge badge-danger">ALTA</span>
+
+                            <span *ngIf="tarefa.prioridade == '2'" class="badge badge-warning">MÉDIA</span>
+
+                            <span *ngIf="tarefa.prioridade == '1'" class="badge badge-success">BAIXA</span>
+                        </td>
+                        <td>
+
+                            <button class="btn btn-sm btn-outline-primary" data-target="#modal_edicao"
+                                data-toggle="modal" title="Atualizar tarefa"
+                                (click)="obterTarefa(tarefa.idTarefa, 'EDITAR')">
+                                <i class="fa fa-clone"></i>
+                            </button>
+                            &nbsp;
+                            <button class="btn btn-sm btn-outline-danger" data-target="#modal_exclusao"
+                                data-toggle="modal" title="Excluir tarefa" (click)="obterTarefa(tarefa.idTarefa)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6">
+                            Quantidade de tarefas: {{(dados | filter : filtro).length}}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- régua de paginação -->
+            <pagination-controls (pageChange)="handlePageChange($event)" previousLabel="Página anterior"
+                nextLabel="Próxima página">
+            </pagination-controls>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Janela modal para atualizar os dados da tarefa -->
+<div id="modal_edicao" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Atualizar dados da tarefa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div *ngIf="message" class="alert alert-primary alert-dismissible fade show" role="alert">
+                    <strong><i class="fa fa-check-circle"></i> {{message}}</strong>
+                </div>
+
+                <form [formGroup]="formEdicaoTarefa" (ngSubmit)="confirmarAtualizacao()">
+
+                    <!-- campo oculto -->
+                    <input type="hidden" formControlName="idTarefa" />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Nome da tarefa:</label>
+                            <input type="text" class="form-control" formControlName="nome" />
+
+                            <div class="text-danger" *ngIf="form.nome.touched && form.nome.invalid">
+
+                                <span *ngIf="form.nome.errors.required">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe o nome.
+                                </span>
+
+                                <span *ngIf="form.nome.errors.minlength">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe pelo menos 6 caracteres.
+                                </span>
+
+                                <span *ngIf="form.nome.errors.maxlength">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe no máximo 150 caracteres.
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Data da tarefa:</label>
+                            <input type="date" class="form-control" formControlName="data" />
+
+                            <div class="text-danger" *ngIf="form.data.touched && form.data.invalid">
+
+                                <span *ngIf="form.data.errors.required">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe a data.
+                                </span>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label>Hora da tarefa:</label>
+                            <input type="time" class="form-control" formControlName="hora" />
+
+                            <div class="text-danger" *ngIf="form.hora.touched && form.hora.invalid">
+
+                                <span *ngIf="form.hora.errors.required">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe a hora.
+                                </span>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label>Descrição da tarefa:</label>
+                            <textarea class="form-control" formControlName="descricao"></textarea>
+
+                            <div class="text-danger" *ngIf="form.descricao.touched && form.descricao.invalid">
+
+                                <span *ngIf="form.descricao.errors.required">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe a descrição.
+                                </span>
+
+                                <span *ngIf="form.descricao.errors.minlength">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe pelo menos 6 caracteres.
+                                </span>
+
+                                <span *ngIf="form.descricao.errors.maxlength">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe no máximo 250 caracteres.
+                                </span>
+
+                            </div>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label>Prioridade:</label>
+                            <select class="form-control" formControlName="prioridade">
+                                <option value="">Escolha uma opção</option>
+                                <option value="1">BAIXA</option>
+                                <option value="2">MÉDIA</option>
+                                <option value="3">ALTA</option>
+                            </select>
+
+                            <div class="text-danger" *ngIf="form.prioridade.touched && form.prioridade.invalid">
+
+                                <span *ngIf="form.prioridade.errors.required">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    Por favor, informe a prioridade.
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <button class="btn btn-primary" type="submit" [disabled]="!formEdicaoTarefa.valid">
+                                <i class="fa fa-check-circle"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Janela modal para excluir os dados da tarefa -->
+<div id="modal_exclusao" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Excluir tarefa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <p>
+                    <strong class="text-danger">Deseja realmente excluir a tarefa selecionada?</strong>
+                </p>
+
+                <table class="table table-bordered table-sm">
+                    <tr>
+                        <th>Nome da tarefa:</th>
+                        <td>{{item.nome | uppercase}}</td>
+                    </tr>
+                    <tr>
+                        <th>Data:</th>
+                        <td>{{item.data | date : 'dd/MM/yyyy'}}</td>
+                    </tr>
+                    <tr>
+                        <th>Hora:</th>
+                        <td>{{item.hora}}h</td>
+                    </tr>
+                    <tr>
+                        <th>Descrição:</th>
+                        <td>{{item.descricao}}</td>
+                    </tr>
+                    <tr>
+                        <th>Prioridade:</th>
+                        <td>
+                            <span *ngIf="item.prioridade == '3'" class="badge badge-danger">ALTA</span>
+
+                            <span *ngIf="item.prioridade == '2'" class="badge badge-warning">MÉDIA</span>
+
+                            <span *ngIf="item.prioridade == '1'" class="badge badge-success">BAIXA</span>
+                        </td>
+                    </tr>
+                </table>
+
+                <button class="btn btn-danger mt-2" data-dismiss="modal" (click)="confirmarExclusao()">
+                    <i class="fa fa-check-circle"></i> Confirmar exclusão
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
