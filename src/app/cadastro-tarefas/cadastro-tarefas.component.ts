@@ -20,7 +20,7 @@ export class CadastroTarefasComponent implements OnInit {
     //evento executado antes do carregamento do componente
   }
 
-  //criando um objeto capaz de capturar todo 
+  //criando um objeto capaz de capturar todo
   //o conteudo do formulário
   formCadastroTarefa = new FormGroup(
     {
@@ -41,9 +41,9 @@ export class CadastroTarefasComponent implements OnInit {
       ]),
       //DESCRIÇÃO DA TAREFA (campo do formulário)
       descricao: new FormControl('', [
-        Validators.required, //campo obrigatório  
+        Validators.required, //campo obrigatório
         Validators.minLength(6), //mínimo de caracteres
-        Validators.maxLength(250), //máximo de caracteres  
+        Validators.maxLength(250), //máximo de caracteres
       ]),
       //PRIORIDADE DA TAREFA (campo do formulário)
       prioridade: new FormControl('', [
@@ -65,12 +65,18 @@ export class CadastroTarefasComponent implements OnInit {
 
     //gravar os dados da tarefa em memória..
     this.tarefasService.addTarefa(this.formCadastroTarefa.value)
+      .subscribe(
+        (data:any) =>{
+           //limpar os campos do formulário..
+          this.formCadastroTarefa.reset();
 
-    //limpar os campos do formulário..
-    this.formCadastroTarefa.reset();
-
-    //mensagem de popup do navegador
-    this.message = 'Tarefa cadastrada com sucesso!';
+          //mensagem de popup do navegador
+          this.message = data.message;
+        },
+        (e) => {
+          console.log(e);
+        }
+      )
   }
 
   //função para limpar a mensagem

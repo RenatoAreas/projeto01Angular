@@ -21,7 +21,7 @@ export class ConsultaTarefasComponent implements OnInit {
   //que o usuario estiver navegando na paginação
   page = 1;
 
-  //método construtor utilizado para inicializar 
+  //método construtor utilizado para inicializar
   //os serviços que o componente precisa
   constructor(private tarefasService: TarefasService) { }
 
@@ -33,13 +33,21 @@ export class ConsultaTarefasComponent implements OnInit {
   //variavel para capturar os dados
   //de 1 tarefa selecionada para exclusão ou edição
   item: Tarefa = {
-    idTarefa: -1, nome: '', data: '', hora: '', descricao: '', prioridade: ''
+    idTarefa: '', nome: '', data: '', hora: '', descricao: '', prioridade: ''
   };
 
   //evento executado antes que o componente abra..
   ngOnInit(): void {
     //trazer todas as tarefas que estão gravadas em memória
-    this.dados = this.tarefasService.getTarefas();
+    this.tarefasService.getTarefas()
+      .subscribe(
+        (data) => {
+          this.dados = data as any[];
+        },
+        (e) => {
+          console.log(e);
+        }
+      )
   }
 
   //formulário de edição de tarefa
@@ -73,45 +81,69 @@ export class ConsultaTarefasComponent implements OnInit {
   }
 
   //função para obter os dados da tarefa selecionada..
-  obterTarefa(idTarefa: number, opcao?: string): void {
+  obterTarefa(idTarefa: string, opcao?: string): void {
 
     //buscar os dados da tarefa atraves do ID..
-    this.item = this.tarefasService.getTarefaById(idTarefa);
+    this.tarefasService.getTarefaById(idTarefa)
+      .subscribe(
+        (data: any) => {
+          this.item = data;
 
-    //se a opção for editar, iremos preencher um formulario..
-    if (opcao === 'EDITAR') {
+          //se a opção for editar, iremos preencher um formulario..
+          if (opcao === 'EDITAR') {
 
-      //preencher os campos do formulário
-      this.formEdicaoTarefa.controls.idTarefa.setValue(this.item.idTarefa);
-      this.formEdicaoTarefa.controls.nome.setValue(this.item.nome);
-      this.formEdicaoTarefa.controls.data.setValue(this.item.data);
-      this.formEdicaoTarefa.controls.hora.setValue(this.item.hora);
-      this.formEdicaoTarefa.controls.descricao.setValue(this.item.descricao);
-      this.formEdicaoTarefa.controls.prioridade.setValue(this.item.prioridade);
+            //preencher os campos do formulário
+            this.formEdicaoTarefa.controls.idTarefa.setValue(this.item.idTarefa);
+            this.formEdicaoTarefa.controls.nome.setValue(this.item.nome);
+            this.formEdicaoTarefa.controls.data.setValue(this.item.data);
+            this.formEdicaoTarefa.controls.hora.setValue(this.item.hora);
+            this.formEdicaoTarefa.controls.descricao.setValue(this.item.descricao);
+            this.formEdicaoTarefa.controls.prioridade.setValue(this.item.prioridade);
 
-      this.message = "";
-    }
+            this.message = "";
+          }
+        },
+        (e) => {
+          console.log(e);
+        }
+      )
   }
 
   //função para confirmar a atualização dos dados da tarefa
   confirmarAtualizacao(): void {
 
     //atualizar a tarefa com os dados preenchidos no formulário
-    this.tarefasService.update(this.formEdicaoTarefa.value);
+    this.tarefasService.update(this.formEdicaoTarefa.value)
+      .subscribe(
+        (data: any) => {
+          //recarregar a consulta
+          this.ngOnInit();
 
-    //recarregar a consulta
-    this.ngOnInit();
-
-    //exibir mensagem de sucesso
-    this.message = "Tarefa atualizada com sucesso.";
+          //exibir mensagem de sucesso
+          this.message = data.message;
+        },
+        (e) => {
+          console.log(e);
+        }
+      )
   }
 
   //função para excluir uma tareda..
   confirmarExclusao(): void {
+
     //excluindo a tarefa selecionada..
-    this.tarefasService.delete(this.item);
-    //executar novamente a consulta
-    this.ngOnInit();
+    this.tarefasService.delete(this.item)
+      .subscribe(
+        (data: any) => {
+          //executar novamente a consulta
+          this.ngOnInit();
+
+          alert(data.message);
+        },
+        (e) => {
+          console.log(e);
+        }
+      )
   }
 
   //função para realizar a paginaçao
